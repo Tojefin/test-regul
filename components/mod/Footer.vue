@@ -1,0 +1,38 @@
+<template>
+	<div class="footer__container">
+		<div class="footer__text footer__text-black">© Annonce 2023</div>
+		<div class="footer__text">Документы</div>
+		<div class="footer__text">О компании</div>
+	</div>
+</template>
+
+<style scoped lang="scss">
+.footer {
+	&__container {
+		padding: 24px 32px 40px;
+		background: #f5f5f5;
+		display: flex;
+	}
+
+	&__text {
+		font-size: 15px;
+		font-weight: 500;
+		line-height: 24px;
+		text-align: left;
+		color: #6b6b6b;
+		margin-right: 20px;
+	}
+
+	&__text-black {
+		color: #0f0f0f;
+	}
+
+	@media (max-width: 500px) {
+		&__container {
+			flex-direction: column;
+			align-items: flex-start;
+			padding: 20px;
+		}
+	}
+}
+</style>

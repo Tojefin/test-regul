@@ -1,0 +1,168 @@
+<template>
+  <div class="header__container">
+    <div class="header__logo-container">
+      <IconLogo class="header__logo" />
+      <button class="header__category-button">
+        <IconMenu />
+        <div>Все категории</div>
+      </button>
+    </div>
+
+    <div class="header__info-container">
+      <div class="header__location-container">
+        <IconMapPoint class="header__icon" />
+        <div>Ростов-на-Дону</div>
+      </div>
+      <div class="header__divider" />
+      <a class="header__offers-link" href="/bord">Разместить обьявление</a>
+      <div class="header__user-menu">
+        <button class="header__info-button">
+          <IconBurger class="header__icon" />
+          <img src="https://avatars.githubusercontent.com/u/39239196" alt="User avatar" class="header__user-avatar" >
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.header {
+  &__logo-container {
+    display: flex;
+  }
+
+  &__info-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__logo {
+    margin-right: 12px;
+  }
+
+  &__container {
+    background: #fff7eb;
+    padding: 8px 32px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__category-button {
+    cursor: pointer;
+    border: 0px;
+    padding: 12px 16px;
+    gap: 4px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    background: #e8e8e8;
+    display: flex;
+    align-items: center;
+  }
+
+  &__info-button {
+    cursor: pointer;
+    border: 0px;
+    padding: 4px 4px 4px 12px;
+    gap: 8px;
+    border-radius: 24px;
+    background: #e8e8e8;
+    display: flex;
+    align-items: center;
+  }
+
+  &__offers-link {
+    margin: 4px 24px;
+    padding: 8px 12px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    color: #337566;
+  }
+
+  &__icon {
+    margin-right: 8px;
+  }
+
+  &__user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__location-container {
+    display: flex;
+    align-items: center;
+    padding: 4px 6px;
+    margin-right: 24px;
+  }
+
+  &__divider {
+    height: 32px;
+    width: 1px;
+    background-color: #cccccc;
+  }
+
+  &__user-menu {
+    position: relative;
+  }
+
+  &__menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #f5f5f5;
+    border: 1px solid #6b6b6b;
+    border-radius: 12px;
+    padding: 10px;
+    z-index: 1000;
+    min-width: 150px;
+
+    &-link {
+      display: block;
+      padding: 5px 0;
+      color: #333;
+      text-decoration: none;
+
+      &:hover {
+        color: #337566;
+      }
+    }
+  }
+
+  @media (max-width: 950px) {
+    &__container {
+      padding: 8px 16px;
+    }
+
+    &__logo-container {
+      flex: 1;
+    }
+
+    &__category-button,
+    &__location-container,
+    &__divider,
+    &__offers-link {
+      display: none;
+    }
+
+    &__info-container {
+      justify-content: flex-end;
+    }
+
+    &__info-button {
+      background: transparent;
+      padding: 0;
+    }
+
+    &__icon {
+      margin-right: 8px;
+    }
+  }
+}
+</style>

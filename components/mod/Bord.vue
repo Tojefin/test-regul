@@ -1,0 +1,400 @@
+<template>
+	<div class="offers">
+		<div class="offers__dropdown-container">
+			<div class="offers__dropdown">
+				<button class="offers__dropdown-button" @click="toggleDropdown" >
+					{{ selectedCategory }}
+					<span class="offers__dropdown-icon" :class="{ open: isDropdownOpen }" />
+				</button>
+				<div v-if="isDropdownOpen" class="offers__dropdown-content">
+					<div v-for="(category, index) in categories" :key="index" class="offers__category-group">
+						<a href="#" class="offers__category-name" @click="selectCategory(category.name)">{{ category.name }}</a>
+						<a v-for="subcategory in category.subcategories" :key="subcategory" class="offers__subcategory-name"
+							href="#" @click="selectCategory(subcategory)">
+							{{ subcategory }}
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="offers__grid">
+				<div v-for="offer in offers" :key="offer.id" class="offers__card">
+					<div class="offers__image-container">
+						<img :src="offer.image" :alt="offer.title" class="offers__image" >
+						<div class="offers__meta">
+							<div class="offers__meta-container">
+								<div class="offers__views">
+									<IconViews class="offers__views-img" />
+									<div class="offers__views-text">{{ offer.views }}</div>
+								</div>
+								<div class="offers__days">
+									<IconDate class="offers__views-img" />
+									<div class="offers__days-text">{{ offer.daysAgo }} дня</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="offers__details">
+						<p class="offers__price">{{ offer.price.toLocaleString("ru-RU") }} ₽</p>
+						<h2 class="offers__title">{{ offer.title }}</h2>
+						<hr class="offers__divider" >
+						<div class="offers__promotion">
+							<span  class="offers__promotion-text">Увеличьте количество просмотров</span>
+							<button class="offers__promotion-button" >
+								Продвигать
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { getOffers } from '~/api'
+
+const offers = await getOffers()
+
+const categories = [
+	{
+		name: "Все категории",
+		subcategories: [],
+	},
+	{
+		name: "Категория 1",
+		subcategories: ["Гробы", "Урны"],
+	},
+	{
+		name: "Категория 2",
+		subcategories: ["Тапки", "Покрывало"],
+	}
+]
+
+const isDropdownOpen = ref(false)
+const selectedCategory = ref("Все категории")
+
+function toggleDropdown() {
+	isDropdownOpen.value = !isDropdownOpen.value
+}
+
+function selectCategory(category: string) {
+	selectedCategory.value = category
+	isDropdownOpen.value = false
+}
+</script>
+
+<style scoped lang="scss">
+.offers {
+  padding: 24px 40px 73px;
+
+  &__dropdown-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  &__dropdown {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__dropdown-button {
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #dbdbdb;
+    background-color: #ededed;
+    color: #0f0f0f;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: left;
+    cursor: pointer;
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__dropdown-icon {
+    width: 24px;
+    height: 24px;
+    background-color: #ededed;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+
+    &::after {
+      content: "\25BC";
+      font-size: 12px;
+      color: #888888;
+    }
+
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 40;
+    background-color: #ededed;
+    width: 320px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    margin-top: 8px;
+    padding: 8px 0;
+  }
+
+  &__category-group {
+    padding: 0;
+  }
+
+  &__category-name,
+  &__subcategory-name {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    line-height: 24px;
+
+    &:hover {
+      background-color: #dbdbdb;
+    }
+  }
+
+  &__category-name {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: left;
+    color: #6b6b6b;
+  }
+
+  &__subcategory-name {
+    color: #0f0f0f;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 24px;
+    row-gap: 48px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    border: 0px solid #e0e0e0;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  &__image-container {
+    position: relative;
+    padding-top: 75%;
+  }
+
+  &__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  &__meta {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__meta-container {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__views,
+  &__days {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__views-text,
+  &__days-text {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+    color: #f5f5f5;
+  }
+
+  &__views-img {
+    margin-right: 8px;
+  }
+
+  &__details {
+    padding: 16px 4px 4px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  &__price {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: left;
+    margin: 0;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: left;
+    margin: 12px 0;
+  }
+
+  &__divider {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 0 0 12px;
+  }
+
+  &__promotion {
+    margin-top: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__hidden {
+    margin-top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__promotion-text {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+    color: #337566;
+  }
+
+  &__promotion-button {
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 15px;
+    border: 0;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    background: #337566;
+    color: #f5f5f5;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #295f53;
+    }
+  }
+
+  &__hide-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
+  &__promoting-text-hidden {
+    margin-top: 10px;
+    font-size: 15px;
+    color: #337566;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+  }
+
+  &__hidden-text {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+    margin-top: 10px;
+    color: #bd3223;
+  }
+  &__unauthorized {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  &__login-link {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #337566;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .offers__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .offers__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .offers__grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
